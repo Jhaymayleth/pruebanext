@@ -2,6 +2,12 @@
 "use client";
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
+import {
+  BOOKING_MAX_ADVANCE_DAYS,
+  BOOKING_MAX_HOURS,
+  BOOKING_MIN_HOURS,
+  validateBookingSlot,
+} from "@/lib/booking-rules";
 
 type SpaceType = "DESK" | "MEETING_ROOM" | "BOOTH";
 type ReservationStatus = "CONFIRMED" | "CANCELLED";
@@ -240,19 +246,11 @@ export default function ReservationsClient({
 
     const start = new Date(startAt);
     const end = new Date(endAt);
-    const duration = (end.getTime() - start.getTime()) / 3_600_000;
 
-    if (
-      !Number.isFinite(start.getTime()) ||
-      !Number.isFinite(end.getTime()) ||
-      start.getTime() <= Date.now()
-    ) {
-      setFormError("La reserva debe comenzar en una fecha futura.");
-      return;
-    }
+    const violation = validateBookingSlot(start, end);
 
-    if (duration < 1 || duration > 12) {
-      setFormError("La reserva debe durar entre 1 y 12 horas.");
+    if (violation) {
+      setFormError(violation.message);
       return;
     }
 
@@ -362,6 +360,13 @@ export default function ReservationsClient({
 
         {!spacesLoading && !spacesError && spaces.length > 0 && (
           <form onSubmit={handleCreateReservation}>
+            <p>
+              Las reservas duran entre {BOOKING_MIN_HOURS} y {BOOKING_MAX_HOURS}{" "}
+              horas completas, en horas exactas, entre las 07:00 y las 21:00
+              (hora de Colombia) y con máximo {BOOKING_MAX_ADVANCE_DAYS} días de
+              anticipación.
+            </p>
+
             <div>
               <label htmlFor="spaceId">Espacio</label>
               <select
@@ -396,6 +401,7 @@ export default function ReservationsClient({
                 type="datetime-local"
                 value={startAt}
                 min={minDateTime}
+                step={3600}
                 onChange={(event) => setStartAt(event.target.value)}
                 required
                 disabled={submitting}
@@ -409,6 +415,7 @@ export default function ReservationsClient({
                 type="datetime-local"
                 value={endAt}
                 min={startAt || minDateTime}
+                step={3600}
                 onChange={(event) => setEndAt(event.target.value)}
                 required
                 disabled={submitting}
