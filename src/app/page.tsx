@@ -1,69 +1,173 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const features = [
+  {
+    number: "01",
+    title: "Encuentra tu espacio",
+    description:
+      "Explora escritorios, salas de reuniones y espacios privados según tus necesidades.",
+  },
+  {
+    number: "02",
+    title: "Reserva en minutos",
+    description:
+      "Elige la fecha y el horario que mejor se adapten a tu jornada.",
+  },
+  {
+    number: "03",
+    title: "Trabaja a tu manera",
+    description:
+      "Organiza tus reuniones y sesiones de trabajo desde un solo lugar.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <main>
+      <header className="site-header">
+        <Link href="/" className="brand">
+          <span className="brand-mark">C</span>
+          CoSpace
+        </Link>
+
+        <nav className="nav-links">
+          <a href="#como-funciona">Cómo funciona</a>
+          <Link href="/spaces">Espacios</Link>
+        </nav>
+
+        <div className="header-actions">
+          <Link href="/login" className="button button-ghost">
+            Iniciar sesión
+          </Link>
+          <Link href="/register" className="button button-dark">
+            Crear cuenta
+          </Link>
+        </div>
+      </header>
+
+      <section className="hero">
+        <div className="hero-content">
+          <span className="eyebrow">
+            TU ESPACIO. TU RITMO. TU FORMA DE TRABAJAR.
+          </span>
+
+          <h1>
+            Un mejor lugar
+            <br />
+            para hacer
+            <br />
+            <span>grandes cosas.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="hero-description">
+            Encuentra y reserva espacios de coworking que se adaptan a tus
+            ideas, tus reuniones y tu forma de trabajar.
           </p>
+
+          <div className="hero-actions">
+            <Link href="/spaces" className="button button-dark button-large">
+              Explorar espacios <span aria-hidden="true">↗</span>
+            </Link>
+            <a href="#como-funciona" className="text-link">
+              Descubre cómo funciona ↓
+            </a>
+          </div>
+
+          <div className="hero-note">
+            <span className="status-dot" />
+            Tu próximo lugar de trabajo está aquí.
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="hero-visual" aria-label="Espacio de trabajo moderno">
+          <div className="visual-topline">
+            <span>ESPACIOS PARA CRECER</span>
+            <span>CO / 001</span>
+          </div>
+
+          <div className="visual-art">
+            <div className="sun" />
+            <div className="window window-one" />
+            <div className="window window-two" />
+            <div className="plant plant-one">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="desk">
+              <div className="desk-top" />
+              <div className="desk-leg desk-leg-one" />
+              <div className="desk-leg desk-leg-two" />
+              <div className="laptop">
+                <div />
+              </div>
+              <div className="mug" />
+            </div>
+            <div className="chair">
+              <div className="chair-back" />
+              <div className="chair-seat" />
+              <div className="chair-base" />
+            </div>
+          </div>
+
+          <div className="visual-caption">
+            <div>
+              <span className="caption-label">EL LUGAR IDEAL PARA</span>
+              <strong>Tu próxima gran idea.</strong>
+            </div>
+            <span className="caption-symbol">✳</span>
+          </div>
         </div>
-      </main>
-    </div>
+
+        <div className="hero-index">ESPACIOS QUE INSPIRAN · 2026</div>
+      </section>
+
+      <section className="intro-section" id="como-funciona">
+        <div className="section-heading">
+          <span className="eyebrow">MENOS COMPLICACIONES, MÁS IDEAS</span>
+          <h2>
+            Trabajar bien
+            <br />
+            empieza por <span>el lugar.</span>
+          </h2>
+        </div>
+
+        <div className="feature-list">
+          {features.map((feature) => (
+            <article className="feature" key={feature.number}>
+              <span className="feature-number">{feature.number}</span>
+              <div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
+              <span className="feature-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="cta-section">
+        <div>
+          <span className="eyebrow">TU SIGUIENTE JORNADA COMIENZA AQUÍ</span>
+          <h2>Encuentra tu lugar.</h2>
+          <p>Descubre espacios pensados para que puedas concentrarte.</p>
+        </div>
+        <Link href="/spaces" className="button button-light button-large">
+          Ver espacios <span aria-hidden="true">↗</span>
+        </Link>
+      </section>
+
+      <footer className="site-footer">
+        <Link href="/" className="brand">
+          <span className="brand-mark">C</span>
+          CoSpace
+        </Link>
+        <span>Un espacio para cada idea.</span>
+        <span>© 2026 CoSpace</span>
+      </footer>
+    </main>
   );
 }
