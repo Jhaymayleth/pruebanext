@@ -43,9 +43,72 @@ const reservationSchema = z
     },
   );
 
+export async function GET() {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return NextResponse.json(
+      { error: "Debes iniciar sesión para consultar tus reservas." },
+      { status: 401 },
+    );
+  }
+
+  const session = await verifyAccessToken(accessToken);
+
+  if (!session) {
+    return NextResponse.json(
+      { error: "La sesión no es válida o ha expirado." },
+      { status: 401 },
+    );
+  }
+
+  try {
+    const reservations = await prisma.reservation.findMany({
+      where: {
+        userId: session.userId,
+      },
+      select: {
+        id: true,
+        startAt: true,
+        endAt: true,
+        totalPrice: true,
+        status: true,
+        createdAt: true,
+        cancelledAt: true,
+        space: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            capacity: true,
+          },
+        },
+      },
+      orderBy: {
+        startAt: "desc",
+      },
+    });
+
+    return NextResponse.json({
+      data: reservations.map((reservation) => ({
+        ...reservation,
+        totalPrice: reservation.totalPrice.toString(),
+      })),
+    });
+  } catch (error) {
+    console.error("Error al consultar reservas:", error);
+
+    return NextResponse.json(
+      { error: "No se pudieron consultar las reservas." },
+      { status: 500 },
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
+  const accessToken = cookieStore.get("access_token")?.value;
 
   if (!accessToken) {
     return NextResponse.json(
