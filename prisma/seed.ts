@@ -1,8 +1,11 @@
-
 import "dotenv/config";
+import bcrypt from "bcryptjs";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Prisma, SpaceType } from "../src/generated/prisma/client";
-import { PrismaClient } from "../src/generated/prisma/client";
+import {
+  Prisma,
+  PrismaClient,
+  SpaceType,
+} from "../src/generated/prisma/client";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -12,6 +15,12 @@ if (!connectionString) {
 
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
+
+const adminName = process.env.ADMIN_NAME?.trim() || "Administrador CoSpace";
+const adminEmail = (
+  process.env.ADMIN_EMAIL?.trim() || "admin@cospace.com"
+).toLowerCase();
+const adminPassword = process.env.ADMIN_PASSWORD?.trim() || "Admin123456";
 
 const spaces = [
   {
@@ -37,7 +46,31 @@ const spaces = [
   },
 ];
 
-async function main() {
+async function seedAdmin() {
+  if (adminPassword.length < 8) {
+    throw new Error("ADMIN_PASSWORD debe tener al menos 8 caracteres");
+  }
+
+  const passwordHash = await bcrypt.hash(adminPassword, 12);
+
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      name: adminName,
+      passwordHash,
+      role: "ADMIN",
+    },
+    create: {
+      name: adminName,
+      email: adminEmail,
+      passwordHash,
+      role: "ADMIN",
+    },
+    select: { id: true },
+  });
+}
+
+async function seedSpaces() {
   for (const space of spaces) {
     const existing = await prisma.space.findFirst({
       where: { name: space.name },
@@ -55,13 +88,19 @@ async function main() {
       });
     }
   }
+}
 
+async function main() {
+  await seedAdmin();
+  await seedSpaces();
+
+  console.log(`Administrador listo: ${adminEmail}`);
   console.log(`Se verificaron ${spaces.length} espacios de prueba.`);
 }
 
 main()
   .catch((error) => {
-    console.error("Error al crear espacios de prueba:", error);
+    console.error("Error al ejecutar el seed:", error);
     process.exitCode = 1;
   })
   .finally(async () => {

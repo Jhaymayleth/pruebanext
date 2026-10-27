@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma skills sync || exit 0"
+    "db:migrate": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generate",
+    "skills:sync": "prisma skills sync"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
