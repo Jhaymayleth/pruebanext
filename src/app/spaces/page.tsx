@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Reveal } from "@/components/reveal";
+import { SiteHeader } from "@/components/site-header";
 
 type SpaceType = "DESK" | "MEETING_ROOM" | "BOOTH";
 
@@ -142,37 +143,7 @@ export default function SpacesPage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-40 border-b border-line bg-background/85 backdrop-blur">
-        <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center justify-between px-5">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 font-heading text-xl font-black tracking-tight"
-          >
-            <span className="grid size-8 place-items-center rounded-[10px_10px_10px_3px] bg-[#d9fa72] font-display text-sm text-[#242a23]">
-              C
-            </span>
-            CoSpace
-          </Link>
-
-          <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
-            <Link href="/spaces" className="transition hover:text-foreground">
-              Espacios
-            </Link>
-            <Link href="/reservations" className="transition hover:text-foreground">
-              Mis reservas
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" asChild>
-              <Link href="/login">Iniciar sesión</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/register">Crear cuenta</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <div className="mx-auto w-full max-w-[1240px] px-5 py-10">
         <Reveal>

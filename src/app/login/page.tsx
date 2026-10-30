@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Reveal } from "@/components/reveal";
+import { SiteHeader } from "@/components/site-header";
+import { useSession } from "@/hooks/use-session";
 
 type LoginResponse = {
   user?: {
@@ -33,6 +35,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const { status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/spaces");
+    }
+  }, [router, status]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,22 +92,7 @@ export default function LoginPage() {
 
   return (
     <main className="flex min-h-screen flex-col bg-background text-foreground">
-      <header className="border-b border-line">
-        <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center justify-between px-5">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 font-heading text-xl font-black tracking-tight"
-          >
-            <span className="grid size-8 place-items-center rounded-[10px_10px_10px_3px] bg-[#d9fa72] font-display text-sm text-[#242a23]">
-              C
-            </span>
-            CoSpace
-          </Link>
-          <Button variant="ghost" asChild>
-            <Link href="/register">Crear cuenta</Link>
-          </Button>
-        </div>
-      </header>
+      <SiteHeader />
 
       <section className="mx-auto grid w-full max-w-[1240px] flex-1 grid-cols-12 items-center gap-4 px-5 py-14">
         <Reveal className="col-span-12 lg:col-span-5">
